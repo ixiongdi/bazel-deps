@@ -90,7 +90,7 @@ public class BazelDeps {
   private static void printForBuildFile(Artifact artifact, Set<Artifact> dependencies,
                                         Set<Artifact> excludeDependencies) {
     System.out.println("java_library(");
-    System.out.println("  name=\"" + artifact.getArtifactId() + "\",");
+    System.out.println("  name = \"" + artifact.getArtifactId() + "\",");
     System.out.println("  visibility = [\"//visibility:public\"],");
     System.out.println("  exports = [");
 
@@ -98,13 +98,13 @@ public class BazelDeps {
       .map(d -> String.format("    \"@%s//jar\",", artifactName(d)))
       .sorted()
       .forEach(System.out::println);
-
     System.out.println("  ],");
+    System.out.println("  licenses = licenses([\"notice\"]) # Apache License v2");
     System.out.println(")\n");
   }
 
   private static String artifactName(Artifact artifact) {
-    return sanitizeName(artifact.getGroupId()) + "_" + sanitizeName(artifact.getArtifactId());
+    return sanitizeName(artifact.getGroupId()) + "_" + sanitizeName(artifact.getArtifactId() + sanitizeName(artifact.getVersion()));
   }
 
   private static String sanitizeName(String name) {
